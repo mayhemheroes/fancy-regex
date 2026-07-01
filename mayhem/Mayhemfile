@@ -1,0 +1,15 @@
+# fancy-regex in-process libFuzzer target (cargo-fuzz / libfuzzer-sys).
+project: mayhemheroes/fancy-regex
+target: fuzz_parser
+image: mayhemheroes/fancy-regex:latest
+
+cmds:
+  - cmd: /mayhem/fuzz_parser
+    libfuzzer: true
+
+# Benign seed corpus (spec §9): fresh target slugs with no server-side corpus fail
+# the regression smoketest -> has_critical_errors. These seeds are valid patterns
+# that do NOT trip the upstream bug; a pure-replay `-runs=0` over them exits 0.
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/fuzz_parser/testsuite

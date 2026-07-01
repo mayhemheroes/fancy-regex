@@ -1,0 +1,31 @@
+# Additive cargo-fuzz crate for the fancy-regex commit image (Mayhem spec v2).
+#
+# This lives under mayhem/fuzz/ (integration is purely additive — upstream's own
+# fuzz/ dir is left untouched). It depends on fancy-regex as a LIBRARY via a path
+# dependency, so the harness only CALLS upstream code; nothing upstream changes.
+[package]
+name = "fancy-regex-fuzz"
+version = "0.0.0"
+authors = ["Automatically generated"]
+publish = false
+edition = "2018"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+
+# Path up out of mayhem/fuzz/ to the crate root.
+[dependencies.fancy-regex]
+path = "../.."
+
+# Standalone fuzz crate, not part of any parent workspace.
+[workspace]
+members = ["."]
+
+[[bin]]
+name = "fuzz_parser"
+path = "fuzz_targets/fuzz_parser.rs"
+test = false
+doc = false
